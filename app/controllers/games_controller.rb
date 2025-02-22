@@ -1,8 +1,11 @@
 require "open-uri"
 
 class GamesController < ApplicationController
+  VOWELS = %w(A E I O U Y)
   def new
-    @letters = Array.new(10) { ('A'..'Z').to_a.sample }
+    @letters = Array.new(5) { VOWELS.sample }
+    @letters += Array.new(5) { (('A'..'Z').to_a - VOWELS).sample }
+    @letters.shuffle!
   end
 
   def score
@@ -19,7 +22,7 @@ class GamesController < ApplicationController
   end
 
   def english_word?(word)
-    url = "https://wagon-dictionary.herokuapp.com/#{word}"
+    url = "https://dictionary.lewagon.com/#{word}"
     response = URI.open(url).read
     data = JSON.parse(response)
     data['found']
